@@ -26,19 +26,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm
+          cache: "pnpm"
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build with Astro and TinaCMS
         # Using build:local for showcase without TinaCloud configuration.
-        # If you configure TinaCloud, change this to `npm run build` and add TINA_CLIENT_ID and TINA_TOKEN secrets.
-        run: npm run build:local
+        # If you configure TinaCloud, change this to `pnpm run build` and add TINA_CLIENT_ID and TINA_TOKEN secrets.
+        run: pnpm run build:local
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

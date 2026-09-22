@@ -1,0 +1,11 @@
+---
+import Layout from '../layouts/Base.astro';
+import { Hero } from '@/components/blocks/Hero/Hero';
+---
+
+<Layout title="Shadcnblocks Test">
+	<main>
+    {/* client:load tells Astro to send the JS to the browser for interactivity */}
+		<Hero client:load />
+	</main>
+</Layout>

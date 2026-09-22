@@ -1,13 +1,13 @@
 import type { Collection } from 'tinacms';
-import { heroBlockSchema } from '../../src/components/blocks/hero.template';
-import { featuresBlockSchema } from '../../src/components/blocks/features.template';
-import { statsBlockSchema } from '../../src/components/blocks/stats.template';
-import { ctaBlockSchema } from '../../src/components/blocks/cta.template';
-import { testimonialBlockSchema } from '../../src/components/blocks/testimonial.template';
-import { calloutBlockSchema } from '../../src/components/blocks/callout.template';
-import { contentBlockSchema } from '../../src/components/blocks/content.template';
-import { videoBlockSchema } from '../../src/components/blocks/video.template';
-import { splitBlockSchema } from '../../src/components/blocks/split.template';
+import { heroBlockSchema } from '../../src/components/blocks/Hero/hero.template';
+import { featuresBlockSchema } from '../../src/components/blocks/Features/features.template';
+import { statsBlockSchema } from '../../src/components/blocks/Stats/stats.template';
+import { ctaBlockSchema } from '../../src/components/blocks/Cta/cta.template';
+import { testimonialBlockSchema } from '../../src/components/blocks/Testimonial/testimonial.template';
+import { calloutBlockSchema } from '../../src/components/blocks/Callout/callout.template';
+import { contentBlockSchema } from '../../src/components/blocks/Content/content.template';
+import { videoBlockSchema } from '../../src/components/blocks/Video/video.template';
+import { splitBlockSchema } from '../../src/components/blocks/Split/split.template';
 
 export const PageCollection: Collection = {
 	name: 'page',
