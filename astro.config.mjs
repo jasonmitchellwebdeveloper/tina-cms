@@ -9,36 +9,6 @@ import tailwindcss from '@tailwindcss/vite';
 
 import react from '@astrojs/react';
 
-// Host-neutral: every content page prerenders to static HTML, and the one
-// on-demand route (/tina-island, the visual-editing endpoint) is served by
-// whichever host built the site. Each platform sets its own build env var
-// automatically — nothing to configure — and any other host (including a
-// local `wrangler deploy`) falls back to a portable Node server. Set
-// DEPLOY_ADAPTER to force a specific adapter when no env var applies.
-async function getAdapter() {
-    const vercel = async () => (await import('@astrojs/vercel')).default();
-    const cloudflare = async () => (await import('@astrojs/cloudflare')).default();
-    const netlify = async () => (await import('@astrojs/netlify')).default();
-    const nodeStandalone = async () =>
-        (await import('@astrojs/node')).default({ mode: 'standalone' });
-
-    switch (process.env.DEPLOY_ADAPTER) {
-        case 'vercel': return vercel();
-        case 'cloudflare': return cloudflare();
-        case 'netlify': return netlify();
-        case 'node': return nodeStandalone();
-        case undefined: break; // no override -> auto-detect below
-        default:
-            console.warn(`[astro.config] Unknown DEPLOY_ADAPTER "${process.env.DEPLOY_ADAPTER}" - ignoring and auto-detecting.`);
-    }
-    if (process.env.VERCEL) return vercel();
-    // CF_PAGES = Cloudflare Pages CI; WORKERS_CI = Cloudflare Workers Builds CI.
-    if (process.env.WORKERS_CI || process.env.CF_PAGES) return cloudflare();
-    if (process.env.NETLIFY) return netlify();
-
-    return nodeStandalone();
-}
-
 // Prefer an explicit SITE_URL; otherwise use the URL the platform injects so
 // zero-config deploys still emit absolute URLs (sitemap, RSS, OpenGraph).
 // Cloudflare Workers exposes no such var — set SITE_URL there for correct
@@ -53,26 +23,39 @@ function getSiteUrl() {
     return 'http://localhost:4321';
 }
 
+/**
+ * Registers Tina's visual-editing island endpoint in dev only.
+ * Production is fully static, so the route never ships.
+ * @type {import('astro').AstroIntegration}
+ */
+const tinaIslandDevOnly = {
+    name: 'tina-island-dev-only',
+    hooks: {
+        'astro:config:setup': ({ command, injectRoute }) => {
+            if (command === 'dev') {
+                injectRoute({
+                    pattern: '/tina-island/[name]',
+                    entrypoint: './src/lib/tina-island-route.ts',
+                });
+            }
+        },
+    },
+};
+
 // https://astro.build/config
 export default defineConfig({
     site: getSiteUrl(),
     output: 'static',
-    adapter: await getAdapter(),
     redirects: { '/home': '/' },
-    integrations: [mdx(), sitemap(), icon(), tina(), react()],
+    integrations: [mdx(), sitemap(), icon(), tina(), react(), tinaIslandDevOnly],
     build: {
         // Inline the (~10 KiB) bundled CSS into a <style> in <head> instead of a
         // separate render-blocking <link>. Astro's default ('auto') only inlines
         // stylesheets under ~4 KiB, leaving ours blocking first paint on mobile.
         inlineStylesheets: 'always',
     },
-    // Tina Cloud rewrites CMS image src to assets.tina.io; let Astro
-    // fetch those URLs at build time so <Image> can transcode + resize them.
     image: {
-        // Astro 6 responsive images: auto-emit srcset so the browser picks a
-        // variant matched to the rendered box + DPR, not the full intrinsic size.
         layout: 'constrained',
-        remotePatterns: [{ protocol: 'https', hostname: 'assets.tina.io' }],
     },
     vite: {
         plugins: [tailwindcss(), tinaAdminDevRedirect()],
