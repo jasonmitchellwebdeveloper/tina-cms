@@ -10,9 +10,10 @@ interface Props {
 	title: string;
 	description: string;
 	image?: string;
+	hideHeaderFooter?: boolean;
 }
 
-const { title, description, image } = Astro.props;
+const { title, description, image, hideHeaderFooter = false } = Astro.props;
 const config = (await getConfig()).data?.config ?? null;
 ---
 
@@ -22,12 +23,16 @@ const config = (await getConfig()).data?.config ?? null;
 		<BaseHead title={title} description={description} image={image} />
 	</head>
 	<body>
-		<TinaIsland name="global" wrapper={islands.global.wrapper}>
-			<Header config={config} />
-		</TinaIsland>
+		{!hideHeaderFooter && (
+			<TinaIsland name="global" wrapper={islands.global.wrapper}>
+				<Header config={config} />
+			</TinaIsland>
+		)}
 		<slot />
-		<TinaIsland name="global-footer" wrapper={islands['global-footer'].wrapper}>
-			<Footer config={config} />
-		</TinaIsland>
+		{!hideHeaderFooter && (
+			<TinaIsland name="global-footer" wrapper={islands['global-footer'].wrapper}>
+				<Footer config={config} />
+			</TinaIsland>
+		)}
 	</body>
 </html>

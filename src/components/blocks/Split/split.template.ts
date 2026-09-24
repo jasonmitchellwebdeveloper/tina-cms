@@ -1,5 +1,5 @@
 import type { Template } from 'tinacms';
-import type { Action } from '../../lib/data';
+import type { Action } from '@lib/data';
 
 export const splitBlockSchema: Template = {
 	name: 'split',

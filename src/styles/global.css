@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '@fontsource-variable/inter';
+@import '@fontsource-variable/montserrat';
 @plugin '@tailwindcss/typography';
 
 /* Drive the dark: variant from the .dark class (toggled by ThemeToggle),
@@ -45,6 +46,9 @@
 	--color-chart-3: var(--chart-3);
 	--color-chart-4: var(--chart-4);
 	--color-chart-5: var(--chart-5);
+	
+	--animate-scale: scaleAnim 300ms ease-in-out;
+	--animate-heart-pulse: heart-pulse 0.6s ease-in-out;
 }
 
 :root {
@@ -72,6 +76,11 @@
 	--chart-3: oklch(0.398 0.07 227.392);
 	--chart-4: oklch(0.828 0.189 84.429);
 	--chart-5: oklch(0.769 0.188 70.08);
+
+	--sec: #a476ff;
+	--white: #dfdfdf;
+	--white-icon: #f3f3f398;
+	--white-icon-tr: #f3f3f310;
 }
 
 .dark {
@@ -140,4 +149,18 @@
 }
 @media (prefers-reduced-motion: no-preference) {
 	.star-twinkle { animation: twinkle var(--twinkle-dur, 4s) ease-in-out infinite; animation-delay: var(--d, 0s); }
+}
+
+@keyframes scaleAnim {
+	0% { transform: scale(1); }
+	50% { transform: scale(1.1); }
+	100% { transform: scale(1); }
+}
+
+@keyframes heart-pulse {
+	0% { transform: scale(1); }
+	25% { transform: scale(1.1); }
+	50% { transform: scale(1); }
+	75% { transform: scale(1.06); }
+	100% { transform: scale(1); }
 }

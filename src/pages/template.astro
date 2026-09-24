@@ -1,0 +1,18 @@
+---
+import Layout from "@layouts/Base.astro";
+import Nav from "@components/template/nav.astro";
+import Home from "@components/template/home.astro";
+import Projects from "@components/template/projects.astro";
+import Contact from "@components/template/contact.astro";
+import Footer from "@components/template/footer.astro";
+---
+
+<Layout title="Your name" description="Portfolio Template" hideHeaderFooter={true}>
+  <div class="bg-[#101010] sm:px-28 lg:px-20 px-9 text-[#dfdfdf] min-h-screen">
+    <Nav />
+    <Home />
+    <Projects />
+    <Contact />
+    <Footer />
+  </div>
+</Layout>
